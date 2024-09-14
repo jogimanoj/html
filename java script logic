@@ -1,0 +1,33 @@
+let randomNumber = Math.floor(Math.random() * 100) + 1;
+let attempts = 0;
+
+const guessInput = document.getElementById('guess');
+const submitButton = document.getElementById('submit-guess');
+const resultText = document.getElementById('result');
+const restartButton = document.getElementById('restart');
+
+submitButton.addEventListener('click', () => {
+    const userGuess = Number(guessInput.value);
+    attempts++;
+
+    if (userGuess === randomNumber) {
+        resultText.textContent = `Congratulations! You guessed the number ${randomNumber} in ${attempts} attempts.`;
+        submitButton.disabled = true;
+        restartButton.style.display = 'block';
+    } else if (userGuess < randomNumber) {
+        resultText.textContent = 'Too low! Try again.';
+    } else {
+        resultText.textContent = 'Too high! Try again.';
+    }
+
+    guessInput.value = '';
+});
+
+restartButton.addEventListener('click', () => {
+    randomNumber = Math.floor(Math.random() * 100) + 1;
+    attempts = 0;
+    resultText.textContent = '';
+    guessInput.value = '';
+    submitButton.disabled = false;
+    restartButton.style.display = 'none';
+});
