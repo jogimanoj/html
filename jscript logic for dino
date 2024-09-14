@@ -1,0 +1,65 @@
+const dino = document.getElementById('dino');
+const cactus = document.getElementById('cactus');
+const scoreDisplay = document.getElementById('score');
+
+let isJumping = false;
+let score = 0;
+let gameOver = false;
+
+// Function to make the dinosaur jump
+function jump() {
+    if (isJumping) return;
+
+    isJumping = true;
+    let jumpHeight = 0;
+
+    const jumpInterval = setInterval(() => {
+        if (jumpHeight >= 100) {
+            clearInterval(jumpInterval);
+            const fallInterval = setInterval(() => {
+                if (jumpHeight <= 0) {
+                    clearInterval(fallInterval);
+                    isJumping = false;
+                }
+                jumpHeight -= 5;
+                dino.style.bottom = jumpHeight + 'px';
+            }, 20);
+        }
+        jumpHeight += 5;
+        dino.style.bottom = jumpHeight + 'px';
+    }, 20);
+}
+
+// Function to move the cactus and check for collisions
+function moveCactus() {
+    let cactusPosition = 600; // Start position
+    const cactusSpeed = 10; // Speed of the cactus
+
+    const cactusInterval = setInterval(() => {
+        if (cactusPosition < -20) {
+            cactusPosition = 600; // Reset position
+            score++;
+            scoreDisplay.innerText = 'Score: ' + score;
+        }
+
+        if (cactusPosition < 70 && cactusPosition > 50 && !isJumping) {
+            clearInterval(cactusInterval);
+            alert('Game Over! Your score was: ' + score);
+            gameOver = true;
+            return;
+        }
+
+        cactusPosition -= cactusSpeed;
+        cactus.style.right = cactusPosition + 'px';
+    }, 20);
+}
+
+// Start the game
+document.addEventListener('keydown', (event) => {
+    if (event.code === 'Space' && !gameOver) {
+        jump();
+    }
+});
+
+// Start moving the cactus
+moveCactus();
